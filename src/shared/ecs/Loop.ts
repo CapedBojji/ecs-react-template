@@ -23,6 +23,7 @@ export class Loop<T extends unknown[]> {
 		this.systems.push(system);
 		const event = system.event ?? "default";
 		this.systemsByEvent.set(event, this.sortSystems([...(this.systemsByEvent.get(event) ?? []), system]));
+		system.init?.(...this.args);
 	}
 
 	public replaceSystem(old: System<T>, newSystem: System<T>) {
@@ -38,6 +39,7 @@ export class Loop<T extends unknown[]> {
 		const event = system.event ?? "default";
 		this.systemsByEvent.get(event)!.remove(this.systemsByEvent.get(event)!.indexOf(system));
 		this.systemsByEvent.set(event, this.sortSystems(this.systemsByEvent.get(event)!));
+		system.cleanup?.(...this.args);
 	}
 
 	public scheduleSystems(systems: System<T>[]) {
@@ -48,6 +50,7 @@ export class Loop<T extends unknown[]> {
 			const event = system.event ?? "default";
 			this.systemsByEvent.set(event, [...(this.systemsByEvent.get(event) ?? []), system]);
 			scheduledEvents.push(event);
+			system.init?.(...this.args);
 		});
 		scheduledEvents.forEach((event) => {
 			this.systemsByEvent.set(event, this.sortSystems(this.systemsByEvent.get(event)!));
