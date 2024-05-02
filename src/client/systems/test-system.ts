@@ -13,7 +13,6 @@ const system: System<ClientEcsArgs> = {
 	) => {
 		print("Hello, World!");
 	},
-	event: "",
 	toString: () => "Test System",
 };
 
