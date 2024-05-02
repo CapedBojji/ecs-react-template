@@ -3,7 +3,7 @@ import { Producer } from "@rbxts/reflex";
 import { $print } from "rbxts-transform-debug";
 import { SharedState } from "shared/store";
 import { SharedSystem } from "shared/types";
-import otherSharedSystem from "./test-shared-system";
+import otherSharedSystem from "./2";
 
 const system: SharedSystem = {
 	init: () => {
