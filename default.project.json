@@ -32,7 +32,7 @@
 			"StarterPlayerScripts": {
 				"$className": "StarterPlayerScripts",
 				"Client": {
-					"$path": "out/client"
+					"$path": "out/main.client.lua"
 				}
 			}
 		},
