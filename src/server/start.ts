@@ -1,23 +1,22 @@
 import ecr from "@rbxts/ecr";
 import store from "./store";
 import { Loop } from "shared/ecs/Loop";
-import { ClientEcsArgs, ClientSystem } from "./types";
 import { ClientDebugger } from "shared/ecs/Debugger";
 import { Context, HotReloader } from "@rbxts/rewire";
 import { AfterFrameMiddleware, BeforeFrameMiddleware, Events } from "shared/types";
 import { Signal } from "shared/third_party/lemon-signal";
 import { RunService } from "@rbxts/services";
-import { LoopArgsNames } from "../shared/enums";
+import { ServerEcsArgs, ServerSystem } from "./types";
 
 export = function (containers: Instance[], beforeFrameMiddlewares: Instance[], afterFrameMiddlewares: Instance[]) {
 	const world = ecr.registry();
 	const args = new Map<string, unknown>();
-	const loop = new Loop<ClientEcsArgs>(world, store, args);
+	const loop = new Loop<ServerEcsArgs>(world, store, args);
 	const clientDebugger = new ClientDebugger();
 	clientDebugger.track(loop, "MainLoop");
 
-	const systemByModule = new Map<ModuleScript, ClientSystem>();
-	let firstRunSystems: ClientSystem[] | undefined = [];
+	const systemByModule = new Map<ModuleScript, ServerSystem>();
+	let firstRunSystems: ServerSystem[] | undefined = [];
 	const hotreloader = new HotReloader();
 
 	function loadModule(module: ModuleScript, context: Context) {
@@ -25,13 +24,13 @@ export = function (containers: Instance[], beforeFrameMiddlewares: Instance[], a
 		const [ok, system] = pcall(require, module);
 		if (!ok) return warn(`Failed to load module ${module.GetFullName()}: ${system}`);
 		if (firstRunSystems !== undefined) {
-			firstRunSystems.push(system as ClientSystem);
+			firstRunSystems.push(system as ServerSystem);
 		} else if (systemByModule.has(module)) {
-			loop.replaceSystem(systemByModule.get(module)!, system as ClientSystem);
+			loop.replaceSystem(systemByModule.get(module)!, system as ServerSystem);
 		} else {
-			loop.scheduleSystem(system as ClientSystem);
+			loop.scheduleSystem(system as ServerSystem);
 		}
-		systemByModule.set(originalModule, system as ClientSystem);
+		systemByModule.set(originalModule, system as ServerSystem);
 	}
 
 	function unloadModule(_: ModuleScript, context: Context) {
@@ -52,7 +51,7 @@ export = function (containers: Instance[], beforeFrameMiddlewares: Instance[], a
 			if (middleware.IsA("ModuleScript")) {
 				const [ok, middlewareFunction] = pcall(require, middleware);
 				if (!ok) return warn(`Failed to load middleware ${middleware.GetFullName()}: ${middlewareFunction}`);
-				loop.addBeforeFrameMiddleware(middlewareFunction as BeforeFrameMiddleware<ClientEcsArgs>);
+				loop.addBeforeFrameMiddleware(middlewareFunction as BeforeFrameMiddleware<ServerEcsArgs>);
 			}
 		});
 	});
@@ -62,7 +61,7 @@ export = function (containers: Instance[], beforeFrameMiddlewares: Instance[], a
 			if (middleware.IsA("ModuleScript")) {
 				const [ok, middlewareFunction] = pcall(require, middleware);
 				if (!ok) return warn(`Failed to load middleware ${middleware.GetFullName()}: ${middlewareFunction}`);
-				loop.addAfterFrameMiddleware(middlewareFunction as AfterFrameMiddleware<ClientEcsArgs>);
+				loop.addAfterFrameMiddleware(middlewareFunction as AfterFrameMiddleware<ServerEcsArgs>);
 			}
 		});
 	});
@@ -74,10 +73,6 @@ export = function (containers: Instance[], beforeFrameMiddlewares: Instance[], a
 		default: new Signal(),
 		render: new Signal(),
 	};
-	RunService.PreRender.Connect(() => {
-		const skipRender = args.get(LoopArgsNames.SKIP_RENDER);
-		if (skipRender === undefined || !(skipRender as boolean)) events.render.Fire();
-	});
 	RunService.PostSimulation.Connect(() => {
 		events.default.Fire();
 	});
