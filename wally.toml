@@ -1,0 +1,8 @@
+[package]
+name = "caped/ecs-react-template"
+version = "0.1.0"
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "shared"
+
+[dependencies]
+squash = "data-oriented-house/squash@1.1.6"

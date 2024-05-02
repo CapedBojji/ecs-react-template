@@ -24,7 +24,10 @@
 				}
 			},
 			"Shared": {
-				"$path": "out/shared"
+				"$path": "out/shared",
+				"Wally": {
+					"$path": "Packages"
+				}
 			},
 			"Client": {
 				"$path": "out/client"
