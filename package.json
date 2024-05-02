@@ -52,6 +52,7 @@
 		"@rbxts/t": "^3.1.1",
 		"@rbxts/ui-labs": "^2.0.2",
 		"@rbxts/yeagar-utils": "^1.0.0",
+		"rbxts-transform-debug": "^2.2.0",
 		"rbxts-transform-env": "^2.2.0",
 		"rbxts-transformer-t-new": "^1.1.5"
 	}
