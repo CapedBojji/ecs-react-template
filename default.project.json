@@ -31,7 +31,7 @@
 			"$className": "StarterPlayer",
 			"StarterPlayerScripts": {
 				"$className": "StarterPlayerScripts",
-				"TS": {
+				"Client": {
 					"$path": "out/client"
 				}
 			}
