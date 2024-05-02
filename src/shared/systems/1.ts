@@ -19,7 +19,6 @@ const system: SharedSystem = {
 	) => {
 		$print(`Hello, World!`);
 	},
-	before: [otherSharedSystem],
 
 	toString: () => "Test Shared System",
 };
