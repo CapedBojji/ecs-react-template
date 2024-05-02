@@ -8,7 +8,7 @@
 		"$className": "DataModel",
 		"ServerScriptService": {
 			"$className": "ServerScriptService",
-			"TS": {
+			"Server": {
 				"$path": "out/server"
 			}
 		},
@@ -23,8 +23,11 @@
 					}
 				}
 			},
-			"TS": {
+			"Shared": {
 				"$path": "out/shared"
+			},
+			"Client": {
+				"$path": "out/client"
 			}
 		},
 		"StarterPlayer": {
