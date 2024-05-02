@@ -27,4 +27,4 @@ export type AfterFrameMiddleware<T extends unknown[]> = (
 	...args: T
 ) => void;
 export type SharedSystem = System<SharedEcsArgs>;
-export type Events = { [key: string]: Signal<[]> } & { default: Signal<[]> };
+export type Events = { [key: string]: Signal<unknown[]> } & { default: Signal<unknown[]> };

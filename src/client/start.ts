@@ -71,15 +71,8 @@ export = function (containers: Instance[], beforeFrameMiddlewares: Instance[], a
 	firstRunSystems = undefined;
 
 	const events: Events = {
-		default: new Signal(),
-		render: new Signal(),
+		default: Signal.wrap(RunService.PostSimulation),
+		render: Signal.wrap(RunService.PreRender),
 	};
-	RunService.PreRender.Connect(() => {
-		const skipRender = args.get(LoopArgsNames.SKIP_RENDER);
-		if (skipRender === undefined || !(skipRender as boolean)) events.render.Fire();
-	});
-	RunService.PostSimulation.Connect(() => {
-		events.default.Fire();
-	});
 	loop.begin(events);
 };

@@ -101,7 +101,7 @@ export class Loop<T extends unknown[]> {
 		return tableUtils.Reverse(sortedSystems) as System<T>[];
 	}
 
-	public begin(events: { [index: string]: Signal<[]> }) {
+	public begin(events: { [index: string]: Signal<unknown[]> }) {
 		if (this.started) return warn("Loop already started");
 		this.started = true;
 		Object.entries(events).forEach(([name, event]) => {
