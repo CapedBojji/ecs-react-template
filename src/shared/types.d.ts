@@ -7,7 +7,7 @@ export type SharedEcsArgs = [Registry, Producer<SharedState>, Map<string, unknow
 export type System<T extends unknown[]> = {
 	init?: (...args: T) => void;
 	update: (dt: number, frameNumber: number, ...args: T) => void;
-	event: string;
+	event?: string;
 	cleanup?: (...args: T) => void;
 	before?: System<T>[];
 	toString: () => string;
